@@ -47,12 +47,15 @@ class Field {
 class Player {
   #interval = null;
   speed = 5;
+
   constructor(x, y, radius, color, field) {
     this.x = x;
     this.y = y;
     this.radius = radius;
     this.color = color;
+    this.field = field;
     Object.assign(this, field);
+    this.fire = new Fire(800, 60, 10, color, field);
     this.canvas.addEventListener('mousemove', e => {
       this.mX = e.clientX - this.canvas.offsetLeft;
       this.mY = e.clientY - this.canvas.offsetTop;
@@ -60,11 +63,7 @@ class Player {
     this.move();
   }
 
-  checkCollision(x, y) {
-    if (Math.sqrt(Math.pow(this.x - x, 2) + Math.pow(this.y - y, 2)) < this.radius) {
-      this.speed = -this.speed;
-    }
-  }
+
 
   draw() {
     this.ctx.beginPath();
@@ -72,6 +71,7 @@ class Player {
     this.ctx.fillStyle = this.color;
     this.ctx.fill();
     this.ctx.closePath();
+    this.fire.draw();
   }
 
   move() {
@@ -82,13 +82,40 @@ class Player {
       } else {
         this.speed = -this.speed;
       }
-      this.checkCollision(this.mX, this.mY);
+      if (Math.sqrt(Math.pow(this.x - this.mX, 2) + Math.pow(this.y - this.mY, 2)) < this.radius) {
+        this.speed = -this.speed;
+      }
+      if (this.fire.x < 0 || this.fire.x > this.canvas.width) {
+        this.fire = new Fire(this.x, this.y, 10, this.color, this.field);
+      }
     }, 10);
-    this.draw();
   }
 
   stop() {
     clearInterval(this.#interval);
     this.#interval = null;
+  }
+}
+
+class Fire {
+  speed = 10;
+  constructor(x, y, radius, color, field) {
+    this.x = x;
+    this.y = y;
+    this.radius = radius;
+    this.color = color;
+    Object.assign(this, field);
+    if (this.x > this.canvas.width / 2) {
+      this.speed = -this.speed;
+    }
+  }
+
+  draw() {
+    this.x += this.speed;
+    this.ctx.beginPath();
+    this.ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
+    this.ctx.fillStyle = this.color;
+    this.ctx.fill();
+    this.ctx.closePath();
   }
 }
