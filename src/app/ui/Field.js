@@ -9,23 +9,22 @@ export class Field {
 	}
 
 	start(player, player2) {
-		this.#interval = setInterval(() => {
-			this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-			[player, player2].forEach(element => {
-				element.draw();
-				element.fire?.draw();
-			});
-			if (collision(player.fire.x, player.fire.y, player2.x, player2.y, player2.radius)) {
-				player.fire = new Shot(player.x, player.y, 10, player.color, player.field);
-				this.setCount(prev => [prev[0], prev[1] + 1]);
-			} else if (collision(player2.fire.x, player2.fire.y, player.x, player.y, player.radius)) {
-				player2.fire = new Shot(player2.x, player2.y, 10, player2.color, player2.field);
-				this.setCount(prev => [prev[0] + 1, prev[1]]);
-			} else if (collision(player.fire.x, player.fire.y, player2.fire.x, player2.fire.y, player2.fire.radius)) {
-				player.fire = new Shot(player.x, player.y, 10, player.color, player.field);
-				player2.fire = new Shot(player2.x, player2.y, 10, player2.color, player2.field);
-			}
-		}, 8);
+		this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+		[player, player2].forEach(element => {
+			element.draw();
+			element.fire?.draw();
+		});
+		if (collision(player.fire.x, player.fire.y, player2.x, player2.y, player2.radius)) {
+			player.fire = new Shot(player.x, player.y, 10, player.color, player.field);
+			this.setCount(prev => [prev[0], prev[1] + 1]);
+		} else if (collision(player2.fire.x, player2.fire.y, player.x, player.y, player.radius)) {
+			player2.fire = new Shot(player2.x, player2.y, 10, player2.color, player2.field);
+			this.setCount(prev => [prev[0] + 1, prev[1]]);
+		} else if (collision(player.fire.x, player.fire.y, player2.fire.x, player2.fire.y, player2.fire.radius)) {
+			player.fire = new Shot(player.x, player.y, 10, player.color, player.field);
+			player2.fire = new Shot(player2.x, player2.y, 10, player2.color, player2.field);
+		}
+		requestAnimationFrame(() => this.start(player, player2));
 	}
 
 	stop() {
