@@ -4,16 +4,11 @@ import { Field, Player } from './ui';
 
 export default function App() {
   const [count, setCount] = useState([0, 0]);
-  useEffect(() => {
-    console.log(count);
-  }, [count]);
-
 
   useEffect(() => {
     const field = new Field(setCount);
     const player = new Player(60, 60, 50, 'red', field);
     const player2 = new Player(1540, 60, 50, 'blue', field);
-
     field.start(player, player2);
 
     return () => {

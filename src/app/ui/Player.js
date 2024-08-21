@@ -16,7 +16,13 @@ export class Player {
 			this.mX = e.clientX - this.canvas.offsetLeft;
 			this.mY = e.clientY - this.canvas.offsetTop;
 		})
-		this.move();
+
+		this.canvas.addEventListener('click', e => {
+			if ((this.mX > this.x - this.radius && this.mX < this.x + this.radius) &&
+				(this.mY > this.y - this.radius && this.mY < this.y + this.radius)) {
+				console.log('click');
+			}
+		})
 	}
 
 	draw() {

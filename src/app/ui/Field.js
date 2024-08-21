@@ -24,14 +24,15 @@ export class Field {
 			player.fire = new Shot(player.x, player.y, 10, player.color, player.field);
 			player2.fire = new Shot(player2.x, player2.y, 10, player2.color, player2.field);
 		}
-		requestAnimationFrame(() => this.start(player, player2));
+		this.#interval = requestAnimationFrame(() => this.start(player, player2));
 	}
 
 	stop() {
-		clearInterval(this.#interval);
+		cancelAnimationFrame(this.#interval);
 		this.#interval = null;
 	}
 }
+
 function collision(x, y, x2, y2, radius) {
 	if ((x < x2 + radius && x > x2 - radius) &&
 		(y < y2 + radius && y > y2 - radius)) return true;
