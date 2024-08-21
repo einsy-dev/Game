@@ -32,6 +32,7 @@ class Field {
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
       el.forEach(element => {
         element.draw();
+        element.fire?.draw();
       });
     }, 10);
   }
@@ -55,7 +56,8 @@ class Player {
     this.color = color;
     this.field = field;
     Object.assign(this, field);
-    this.fire = new Fire(800, 60, 10, color, field);
+
+    this.fire = new Fire(this.x, this.y, 10, color, field);
     this.canvas.addEventListener('mousemove', e => {
       this.mX = e.clientX - this.canvas.offsetLeft;
       this.mY = e.clientY - this.canvas.offsetTop;
@@ -71,7 +73,6 @@ class Player {
     this.ctx.fillStyle = this.color;
     this.ctx.fill();
     this.ctx.closePath();
-    this.fire.draw();
   }
 
   move() {
